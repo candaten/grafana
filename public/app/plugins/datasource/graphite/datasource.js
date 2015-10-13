@@ -143,6 +143,21 @@ function (angular, _, $, config, dateMath) {
       }
     };
 
+    GraphiteDatasource.prototype.addEvent = function(data) {
+      try {
+
+        return this.doGraphiteRequest({
+          method: 'POST',
+          url: '/events/',
+          data : data,
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        });
+      }
+      catch(err) {
+        return $q.reject(err);
+      }
+    };
+
     GraphiteDatasource.prototype.translateTime = function(date, roundUp) {
       if (_.isString(date)) {
         if (date === 'now') {

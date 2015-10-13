@@ -47,6 +47,11 @@ func NewReverseProxy(ds *m.DataSource, proxyPath string, targetUrl *url.URL) *ht
 				req.Header.Del("Authorization")
 				req.Header.Add("Authorization", util.GetBasicAuthHeader(ds.User, ds.Password))
 			}
+                } else if ds.Type == m.DS_GRAPHITE {
+                        if req.Method == "POST" && proxyPath == "events" {
+                                proxyPath = "events/"
+                        }
+                        req.URL.Path = util.JoinUrlFragments(targetUrl.Path, proxyPath)
 		} else {
 			req.URL.Path = util.JoinUrlFragments(targetUrl.Path, proxyPath)
 		}
