@@ -50,7 +50,7 @@ func NewReverseProxy(ds *m.DataSource, proxyPath string) *httputil.ReverseProxy 
                         if req.Method == "POST" && proxyPath == "events" {
                                 proxyPath = "events/"
                         }
-                        req.URL.Path = util.JoinUrlFragments(targetUrl.Path, proxyPath)
+                        req.URL.Path = util.JoinUrlFragments(target.Path, proxyPath)
 		} else {
 			req.URL.Path = util.JoinUrlFragments(target.Path, proxyPath)
 		}
