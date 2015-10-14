@@ -192,6 +192,18 @@ function (angular, $, kbn, _, moment) {
               moment.utc(date).format(format);
     };
 
+    p.parseDate = function(value, format) {
+      format = format || 'YYYY-MM-DD HH:mm:ss';
+      var result = this.timezone === 'browser' ?
+        moment(value, format) :
+        moment.utc(value, format);
+      if (!result.isValid()) {
+        return undefined;
+      } else {
+        return result.unix();
+      }
+    };
+
     p._updateSchema = function(old) {
       var i, j, k;
       var oldVersion = this.schemaVersion;

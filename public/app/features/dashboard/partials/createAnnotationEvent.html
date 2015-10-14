@@ -1,0 +1,48 @@
+<div class="modal-body gf-box gf-box-no-margin" ng-controller="CreateAnnotationEventCtrl" ng-init="init();">
+	<div class="gf-box-header">
+		<div class="gf-box-title">
+			<i class="fa fa-copy"></i>
+			New Annotation Event
+		</div>
+
+		<button class="gf-box-header-close-btn" ng-click="dismiss();">
+			<i class="fa fa-remove"></i>
+		</button>
+	</div>
+
+	<div class="gf-box-body">
+		<div class="text-center">
+			<div class="editor-row">
+				<div class="editor-option">
+					<label class="medium">Title</label>
+					<input id="what" type="text" class="span4" ng-model="newEventModel.what" give-focus="true" ng-keydown="keyDown($event)"></input>
+				</div>
+			</div>
+
+			<div class="editor-row">
+				<div class="editor-option">
+					<label class="medium">Description</label>
+					<input id="data" type="text" class="span4" ng-model="newEventModel.data" give-focus="false" ng-keydown="keyDown($event)"></input>
+				</div>
+			</div>
+
+                        <div class="editor-row">
+                                <div class="editor-option">
+                                        <label class="small">Timestamp</label>
+                                        <input id="tags" type="text" class="span2" ng-model="newEventModel.when" give-focus="false" ng-keydown="keyDown($event)"></input>
+                                </div>
+                        </div>
+
+			<div class="editor-row">
+				<div class="editor-option">
+					<label class="small">Tags</label>
+					<input id="tags" type="text" class="span2" ng-model="newEventModel.tags" give-focus="false" ng-keydown="keyDown($event)"></input>
+				</div>
+			</div>
+
+			<button class="btn btn-inverse" ng-click="dismiss();">Cancel</button>
+			<button class="btn btn-success" ng-click="saveEvent();">Save</button>
+		</div>
+	</div>
+</div>
+

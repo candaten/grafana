@@ -4,6 +4,7 @@ define([
   './dashboardNavCtrl',
   './snapshotTopNavCtrl',
   './saveDashboardAsCtrl',
+  './createAnnotationEventCtrl',
   './playlistCtrl',
   './rowCtrl',
   './shareModalCtrl',

@@ -1,13 +1,17 @@
 define([
   'jquery',
+  'lodash',
+  'config'
 ],
-function ($) {
+function ($, _, config) {
   'use strict';
 
   function GraphTooltip(elem, dashboard, scope, getSeriesFn) {
     var self = this;
 
     var $tooltip = $('<div id="tooltip">');
+
+    var lasttimestap = '';
 
     this.findHoverIndexFromDataPoints = function(posX, series, last) {
       var ps = series.datapoints.pointsize;
@@ -81,6 +85,38 @@ function ($) {
       return results;
     };
 
+    elem.dblclick(function() {
+      var graphiteDatasourceNames = _.reduce(config.datasources, function(memo, datasource) {
+        if (datasource.type === 'graphite') {
+          memo.push(datasource.name);
+        }
+        return memo;
+      }, []);
+
+      var annotation = _.find(dashboard.annotations.list, function(a) {
+        return a.enable === true && graphiteDatasourceNames.indexOf(a.datasource) > -1;
+      });
+
+      if (annotation) {
+        var datasource = _.find(config.datasources, function(datasource) {
+          return datasource.name === annotation.datasource;
+        });
+        var newScope = scope.$new();
+        newScope.newEventModel = {};
+        newScope.newEventModel.when = lasttimestap;
+        newScope.newEventModel.tags = annotation.tags;
+        newScope.dashboard = dashboard;
+        newScope.datasource = datasource;
+        newScope.annotation = annotation;
+
+        scope.appEvent('show-modal', {
+          src: './app/features/dashboard/partials/createAnnotationEvent.html',
+          scope: newScope
+        });
+      }
+
+    });
+
     elem.mouseleave(function () {
       if (scope.panel.tooltip.shared) {
         var plot = elem.data().plot;
@@ -116,6 +152,7 @@ function ($) {
 
         seriesHtml = '';
         timestamp = dashboard.formatDate(seriesHoverInfo.time);
+        lasttimestap = timestamp;
 
         for (i = 0; i < seriesHoverInfo.length; i++) {
           hoverInfo = seriesHoverInfo[i];
@@ -150,6 +187,8 @@ function ($) {
 
         value = series.formatValue(value);
         timestamp = dashboard.formatDate(item.datapoint[0]);
+        lasttimestap = timestamp;
+
         group += '<div class="graph-tooltip-value">' + value + '</div>';
 
         self.showTooltip(timestamp, group, pos);
